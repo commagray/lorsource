@@ -151,14 +151,31 @@
 
 <c:if test="${not empty modes}">
 <label>Разметка:*<br>
-<form:select path="mode" items="${modes}"/></label><br>
+<c:choose>
+  <%-- Если постим новость, всегда выбираем только стандартную разметку. --%>
+  <c:when test="${group!=null and group.linksAllowed}">
+    <%-- FIXME: лучше брать значение из конфига, а не хардкодить. --%>
+    <form:select path="mode">
+      <form:option value="markdown">Markdown</form:option>
+    </form:select></label><br>
+  </c:when>    
+  <c:otherwise>
+    <form:select path="mode" items="${modes}"/></label><br>
+  </c:otherwise>
+</c:choose>
 </c:if>
 
 <div class="control-group">
   <label for="form_msg">Сообщение</label>
-    <form:textarea path="msg" style="width: 40em" rows="20" id="form_msg"/>
-    <div class="help-block"><b>Внимание:</b> прочитайте описание разметки
-      <a target="_blank" href="/help/markdown.md">Markdown</a> или <a href="/help/lorcode.md" target="_blank">LORCODE</a>.</div>
+  <form:textarea path="msg" style="width: 40em" rows="20" id="form_msg"/>
+  <div class="help-block">
+    <b>Внимание:</b> прочитайте описание разметки
+    <c:choose>
+      <%-- Если постим новость, показываем справку только для стандартной разметки. --%>
+      <c:when test="${group!=null and group.linksAllowed}"><a target="_blank" href="/help/markdown.md">Markdown</a>.</c:when>
+      <c:otherwise><a target="_blank" href="/help/markdown.md">Markdown</a> или <a href="/help/lorcode.md" target="_blank">LORCODE</a>.</c:otherwise>
+    </c:choose>
+  </div>
 </div>
 
 <c:if test="${group!=null and group.linksAllowed}">
