@@ -18,6 +18,7 @@ package ru.org.linux.util.markdown
 import com.vladsch.flexmark.util.ast.{NodeVisitor, VisitHandler}
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension
 import com.vladsch.flexmark.ext.tables.TablesExtension
 import com.vladsch.flexmark.ext.typographic.TypographicExtension
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -44,7 +45,7 @@ class FlexmarkMarkdownFormatter(siteConfig: SiteConfig, topicDao: TopicDao, comm
     val extensions = Seq(TablesExtension.create, StrikethroughExtension.create, AutolinkExtension.create(),
       TypographicExtension.create(), new SuppressImagesExtension,
       new LorLinkExtension(siteConfig, topicDao, commentDao), new LorUserExtension(userService, toHtmlFormatter),
-      new CutExtension, new FencedCodeExtension/*, YouTubeLinkExtension.create()*/)
+      new CutExtension, new FencedCodeExtension/*, YouTubeLinkExtension.create()*/, TaskListExtension.create())
 
     val allExtensions = (if (nofollow) {
       extensions :+ new NofollowExtension
